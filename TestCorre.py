@@ -3,7 +3,7 @@ import numpy as np
 import seaborn as sns
 sns.set()
 import matplotlib.pyplot as plt
-df = pd.read_csv('TestData0-1e.csv',sep=',',header=0, encoding='unicode_escape')
+df = pd.read_csv('DropNewUsed.csv',sep=',',header=0, encoding='unicode_escape')
 #df = df.fillna(-1)
 
 #df = df.dropna()
