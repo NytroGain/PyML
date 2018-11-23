@@ -12,20 +12,27 @@ from sklearn.datasets.samples_generator import make_blobs
 from sklearn.preprocessing import StandardScaler
 from sklearn import datasets
 from sklearn import metrics
-
+from sklearn.metrics import mean_squared_error
 
 #-----------------------------Load File-------------------------------------
 df = pd.read_csv('Book2.csv', sep=',', header=0)
 
 
 #-----------------------------PCA ------------------------------------------
-pca = PCA(n_components=2).fit(df)
+pca = PCA(n_components=9).fit(df)
 pca_2d = pca.transform(df)
 
+#------------------------------K-mean
+kmeans = KMeans(n_clusters=9, random_state=0).fit(pca_2d)
 
+#y_true = kmeans.cluster_centers_
+#y_pred = kmeans
+#mean_squared_error(y_true, y_pred, multioutput='raw_value')
+
+#print("Mean Square Error = ", mean_squared_error)
 #-----------------------------DBSCAN-----------------------------------------
 
-db = DBSCAN(eps=0.08, min_samples=3,algorithm='kd_tree', n_jobs=-1).fit(pca_2d)
+#db = DBSCAN(eps=0.08, min_samples=3,algorithm='kd_tree', n_jobs=-1).fit(pca_2d)
 
 #----------------------------Plot Graph--------------------------------------
 #plt.scatter(pca_2d[:,0],pca_2d[:,1], c=db.labels_, cmap='rainbow') 
@@ -37,12 +44,19 @@ db = DBSCAN(eps=0.08, min_samples=3,algorithm='kd_tree', n_jobs=-1).fit(pca_2d)
 #np.savetxt('Book2DBS.txt', db.labels_)
 
 #------------------------------Evaluate---------------------------------------
-#print("Homogeneity: %0.3f" % metrics.homogeneity_score(df, db.labels_))
-#print("Completeness: %0.3f" % metrics.completeness_score(df, db.labels_))
-#print("V-measure: %0.3f" % metrics.v_measure_score(df, db.labels_))
-#print("Adjusted Rand Index: %0.3f" % metrics.adjusted_rand_score(df, db.labels_))
-#print("Adjusted Mutual Information: %0.3f" % metrics.adjusted_mutual_info_score(df, db.labels_))
-print("Silhouette Coefficient: %0.3f" % metrics.silhouette_score(df, db.labels_))
+#print("Homogeneity: %0.3f" % metrics.homogeneity_score(df, db.labels_))                            #ทำได้แต่ 1 มิติ
+#print("Completeness: %0.3f" % metrics.completeness_score(df, db.labels_))                          #ทำได้แต่ 1 มิติ
+#print("V-measure: %0.3f" % metrics.v_measure_score(df, db.labels_))                                #ทำได้แต่ 1 มิติ
+#print("Adjusted Rand Index: %0.3f" % metrics.adjusted_rand_score(df, db.labels_))                  #ทำได้แต่ 1 มิติ
+#print("Adjusted Mutual Information: %0.3f" % metrics.adjusted_mutual_info_score(df, db.labels_))   #ทำได้แต่ 1 มิติ
+#print("Silhouette Coefficient: %0.3f" % metrics.silhouette_score(pca_2d, kmeans.labels_))
+
+#---------------------------
+
+print (pca.explained_variance_)
+print (pca.explained_variance_ratio_)
+print (pca.explained_variance_ratio_.cumsum())
+
 
 print('----------------------------------------END DBSCAN----------------------------------------')
 #-----Birch
