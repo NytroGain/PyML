@@ -3,6 +3,8 @@ import numpy as np
 import seaborn as sns
 sns.set()
 import matplotlib.pyplot as plt
+from pandas.plotting import scatter_matrix
+
 df = pd.read_csv('LongScat.csv',sep=',',header=0, encoding='unicode_escape')
 #df = df.fillna(-1)
 
@@ -26,10 +28,15 @@ print("-------------------------------End Process-------------------------------
 
 print("-------------------------------Correlation Test-------------------------------")
 
-corr = df.corr()
-f, ax = plt.subplots(figsize=(25, 25))
+#corr = df.corr()
+#f, ax = plt.subplots(figsize=(25, 25))
 
-colormap = sns.diverging_palette(255, 10, as_cmap=True)
-pic = sns.heatmap(corr,cmap=colormap, linewidths=.5, annot=True, fmt=".2f")
+#colormap = sns.diverging_palette(255, 10, as_cmap=True)
+#pic = sns.heatmap(corr,cmap=colormap, linewidths=.5, annot=True, fmt=".2f")
 
+#plt.show()
+print("--------------------------------Scatterplot--------------------------------")
+scatter_matrix(df)
+#colormap = sns.diverging_palette(255, 10, as_cmap=True)
+#pic = sns.heatmap(scatter,cmap=colormap, linewidths=.5, annot=True, fmt=".2f")
 plt.show()
