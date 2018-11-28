@@ -8,22 +8,20 @@ from sklearn.cluster import Birch
 from sklearn.cluster import MeanShift
 from sklearn.cluster import SpectralClustering
 from sklearn.cluster import AgglomerativeClustering
-from sklearn.datasets.samples_generator import make_blobs
-from sklearn.preprocessing import StandardScaler
 from sklearn import datasets
 from sklearn import metrics
 from sklearn.metrics import mean_squared_error
 
 #-----------------------------Load File-------------------------------------
-df = pd.read_csv('Book2.csv', sep=',', header=0)
+df = pd.read_csv('Main01.csv', sep=',', header=0)
 
 
 #-----------------------------PCA ------------------------------------------
-pca = PCA(n_components=9).fit(df)
-pca_2d = pca.transform(df)
+#pca = PCA(n_components=2).fit(df)
+#pca_2d = pca.transform(df)
 
 #------------------------------K-mean
-kmeans = KMeans(n_clusters=9, random_state=0).fit(pca_2d)
+#kmeans = KMeans(n_clusters=9, random_state=0).fit(pca_2d)
 
 #y_true = kmeans.cluster_centers_
 #y_pred = kmeans
@@ -32,13 +30,15 @@ kmeans = KMeans(n_clusters=9, random_state=0).fit(pca_2d)
 #print("Mean Square Error = ", mean_squared_error)
 #-----------------------------DBSCAN-----------------------------------------
 
-#db = DBSCAN(eps=0.08, min_samples=3,algorithm='kd_tree', n_jobs=-1).fit(pca_2d)
+db = DBSCAN(eps=1, min_samples=100,algorithm='kd_tree', n_jobs=-1).fit(df)   #ใช้ eps=2 แล้วเครื่องค้าง
 
 #----------------------------Plot Graph--------------------------------------
 #plt.scatter(pca_2d[:,0],pca_2d[:,1], c=db.labels_, cmap='rainbow') 
 #plt.show()
 
-
+labelof = pd.DataFrame((db.labels_),columns=['labels'])
+print(labelof)
+labelof = labelof.to_csv(('testlabelDBS.csv'), index=False)
 #df['Cluster'] = db.labels_
 #df.to_csv('TestBook2.csv', index=False)
 #np.savetxt('Book2DBS.txt', db.labels_)
@@ -51,11 +51,11 @@ kmeans = KMeans(n_clusters=9, random_state=0).fit(pca_2d)
 #print("Adjusted Mutual Information: %0.3f" % metrics.adjusted_mutual_info_score(df, db.labels_))   #ทำได้แต่ 1 มิติ
 #print("Silhouette Coefficient: %0.3f" % metrics.silhouette_score(pca_2d, kmeans.labels_))
 
-#---------------------------
+#---------------------------Variance
 
-print (pca.explained_variance_)
-print (pca.explained_variance_ratio_)
-print (pca.explained_variance_ratio_.cumsum())
+#print ("Variance", pca.explained_variance_)
+#print ("Variance Ratio", pca.explained_variance_ratio_)
+#print ("Variance Ratio sum", pca.explained_variance_ratio_.cumsum())
 
 
 print('----------------------------------------END DBSCAN----------------------------------------')
