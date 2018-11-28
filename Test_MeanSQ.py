@@ -4,7 +4,7 @@ import sklearn.cluster as cluster
 from sklearn.metrics import mean_squared_error
 import scipy.spatial.distance as sdist
 
-df = pd.read_csv('Main_Edition.csv',sep=',',header=0, encoding='unicode_escape')
+df = pd.read_csv('Main01.csv',sep=',',header=0, encoding='unicode_escape')
 
 #points = df.drop('id', axis=1)
  #or points = df[['Type1', 'Type2', 'Type3']]
@@ -20,7 +20,7 @@ dists = pd.DataFrame(
 #combine = pd.concat([df, dists], axis=1)
 #pdctr = pd.DataFrame(centroids)
 #print(dists)
-kmeanlbl = pd.DataFrame(kmeans.labels_)
+kmeanlbl = pd.DataFrame((kmeans.labels_),columns=['label'])
 #print(combine)
 print("_________________________________________________________________________________________")
 #print("point = ")
@@ -34,16 +34,29 @@ print("----------------------------------Mean Square----------------------------
 j = 0
 m = 0
 n = len(df.index)
-for i in range(5):
+i= 1
+for i in range(n):
     m = kmeanlbl[i]
     print(dists.iloc[i,m])
 
     #j += dists.columns[0:]
-    
-
-#y_true = centroids
-#y_predict = dists
-#mean_squared_error(y_true, y_predict)
+ #__________________________________________________
+ #------------------------------------Loop To Select cluster and distance
+#c0 = []
+#c1 = []
+#finClus = []
+#testmerge = pd.concat([df,kmeanlbl,dists], axis = 1)
+#print(testmerge)
+#testmerge = testmerge.to_csv('MergeError.csv', index=False)
+#for row in testmerge['label']:
+ #   if row == 0:
+  #      finClus.append([testmerge.dist_0]) #testmerge.dist_0.loc
+   # else:
+    #    finClus.append([testmerge.dist_1])
+#gn = pd.DataFrame((finClus), columns=['distance'])
+#print(gn)
+#gn = gn.to_csv('GN.csv', index=False)
+ #   print(dists.iloc[i])
 
 
 #dists = dists.to_csv('C_Distance2Cl.csv', index=False)
