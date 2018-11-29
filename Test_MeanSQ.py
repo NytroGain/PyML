@@ -13,6 +13,7 @@ kmeans = cluster.KMeans(n_clusters=2, random_state=0).fit(df)
 
 centroids = kmeans.cluster_centers_
 
+#----------------------------------Loop to calculate Distance between Cluster poiint and all centroid
 dists = pd.DataFrame(
     sdist.cdist(df, centroids,'euclidean'), 
     columns=['dist_{}'.format(i) for i in range(len(centroids))],
@@ -31,7 +32,7 @@ print("_________________________________________________________________________
 #combine = combine.to_csv('TestLongKmean.csv', index=False)
 
 print("----------------------------------Mean Square--------------------------------------------")
-j = []
+j = [] #Collect all distance for between each cluster point and Centroid
 m = 0
 n = len(df.index)
 i= 1
@@ -45,27 +46,7 @@ eachalldis = pd.DataFrame((ea),columns=['each label of cluster'])
 eachalldis = eachalldis.to_csv('EachForCluster.csv', index=False)
     #j += dists.columns[0:]
  #__________________________________________________
- #------------------------------------Loop To Select cluster and distance
-#c0 = []
-#c1 = []
-#finClus = []
-#testmerge = pd.concat([df,kmeanlbl,dists], axis = 1)
-#print(testmerge)
-#testmerge = testmerge.to_csv('MergeError.csv', index=False)
-#for row in testmerge['label']:
- #   if row == 0:
-  #      finClus.append([testmerge.dist_0]) #testmerge.dist_0.loc
-   # else:
-    #    finClus.append([testmerge.dist_1])
-#gn = pd.DataFrame((finClus), columns=['distance'])
-#print(gn)
-#gn = gn.to_csv('GN.csv', index=False)
- #   print(dists.iloc[i])
 
-
-#dists = dists.to_csv('C_Distance2Cl.csv', index=False)
-#pdctr = pdctr.to_csv('C_Centroid2Cl.csv', index=False)
-#kmeanlbl = kmeanlbl.to_csv('C_Label2Cl.csv', index=False)
 print("-----------------------------Finished-------------------------------")
 #distandcentr = pd.concat([dists, pdctr], axis = 1)
 #distandcentr = distandcentr.to_csv('Kmean5Clustr.csv', index=False)
