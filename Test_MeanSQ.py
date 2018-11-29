@@ -54,9 +54,12 @@ eachalldis = pd.DataFrame((ea),columns=['each label of cluster'])
 n_data = len(set(df.index))
 print(n_data)
 eachpow =  eachalldis**2
-
-
+eachnormal = []
+eachnormal = abs(eachalldis)
+print("Mean Squared Error",eachpow.sum()/n_data)
 print("Root Mean Squared Error",math.sqrt(eachpow.sum()/n_data))
+#print("Mean Absolute Error",eachnormal/n_data)
+
  #__________________________________________________
 
 print("-----------------------------Finished-------------------------------")
