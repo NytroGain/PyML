@@ -3,7 +3,7 @@ import pandas as pd
 import sklearn.cluster as cluster
 from sklearn.metrics import mean_squared_error
 import scipy.spatial.distance as sdist
-
+import math
 df = pd.read_csv('Main01.csv',sep=',',header=0, encoding='unicode_escape')
 
 #points = df.drop('id', axis=1)
@@ -32,6 +32,7 @@ print("_________________________________________________________________________
 #combine = combine.to_csv('TestLongKmean.csv', index=False)
 
 print("----------------------------------Mean Square--------------------------------------------")
+#____________________________________________Select Distance of Cluster in Group
 j = [] #Collect all distance for between each cluster point and Centroid
 m = 0
 n = len(df.index)
@@ -43,8 +44,19 @@ for i in range(n):
 ea = j
     
 eachalldis = pd.DataFrame((ea),columns=['each label of cluster'])
-eachalldis = eachalldis.to_csv('EachForCluster.csv', index=False)
-    #j += dists.columns[0:]
+#eachalldis = eachalldis.to_csv('EachForCluster.csv', index=False)
+
+#___________________________________________Show All Cluster Group
+#n_clusters_ = len(set(kmeanlbl.label))  - (1 if -1 in kmeanlbl.label else 0)
+#print('Estimated number of clusters: %d' % n_clusters_)
+
+#___________________________________________n data
+n_data = len(set(df.index))
+print(n_data)
+eachpow =  eachalldis**2
+
+
+print("Root Mean Squared Error",math.sqrt(eachpow.sum()/n_data))
  #__________________________________________________
 
 print("-----------------------------Finished-------------------------------")
