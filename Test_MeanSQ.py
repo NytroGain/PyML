@@ -31,14 +31,18 @@ print("_________________________________________________________________________
 #combine = combine.to_csv('TestLongKmean.csv', index=False)
 
 print("----------------------------------Mean Square--------------------------------------------")
-j = 0
+j = []
 m = 0
 n = len(df.index)
 i= 1
 for i in range(n):
-    m = kmeanlbl[i]
-    print(dists.iloc[i,m])
-
+    m = kmeanlbl.label[i]
+    #print(dists.iloc[i,m])
+    j.append(dists.iloc[i,m])
+ea = j
+    
+eachalldis = pd.DataFrame((ea),columns=['each label of cluster'])
+eachalldis = eachalldis.to_csv('EachForCluster.csv', index=False)
     #j += dists.columns[0:]
  #__________________________________________________
  #------------------------------------Loop To Select cluster and distance
