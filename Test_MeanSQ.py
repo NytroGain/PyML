@@ -4,11 +4,14 @@ import sklearn.cluster as cluster
 from sklearn.metrics import mean_squared_error
 import scipy.spatial.distance as sdist
 import math
-df = pd.read_csv('Main01.csv',sep=',',header=0, encoding='unicode_escape')
+from sklearn import metrics
+
+
+df = pd.read_csv('CSVscale01newColumn.csv',sep=',',header=0, encoding='unicode_escape')
 
 #points = df.drop('id', axis=1)
  #or points = df[['Type1', 'Type2', 'Type3']]
-kmeans = cluster.KMeans(n_clusters=2, random_state=0).fit(df)
+kmeans = cluster.KMeans(n_clusters=10, random_state=0).fit(df)
 #df['cluster'] = kmeans.labels_ #รวมแล้วมิติไม่เท่ากัน
 
 centroids = kmeans.cluster_centers_
@@ -39,26 +42,29 @@ n = len(df.index)
 i= 1
 for i in range(n):
     m = kmeanlbl.label[i]
-    #print(dists.iloc[i,m])
+    
     j.append(dists.iloc[i,m])
 ea = j
     
-eachalldis = pd.DataFrame((ea),columns=['each label of cluster'])
+eachalldis = pd.DataFrame((ea),columns=['Distance'])
 #eachalldis = eachalldis.to_csv('EachForCluster.csv', index=False)
 
 #___________________________________________Show All Cluster Group
 #n_clusters_ = len(set(kmeanlbl.label))  - (1 if -1 in kmeanlbl.label else 0)
 #print('Estimated number of clusters: %d' % n_clusters_)
-
+#print(eachalldis)
 #___________________________________________n data
 n_data = len(set(df.index))
-print(n_data)
+#print(n_data)
 eachpow =  eachalldis**2
 eachnormal = []
 eachnormal = abs(eachalldis)
-print("Mean Squared Error",eachpow.sum()/n_data)
-print("Root Mean Squared Error",math.sqrt(eachpow.sum()/n_data))
+#print("Mean Squared Error",eachpow.sum()/n_data)
+#print("Root Mean Squared Error",math.sqrt(eachpow.sum()/n_data))
+#print("Silhouette Coefficient: %0.3f" % metrics.silhouette_score(df, kmeans.labels_))
 #print("Mean Absolute Error",eachnormal/n_data)
+print(df.describe())
+
 
  #__________________________________________________
 
