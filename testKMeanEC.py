@@ -5,11 +5,15 @@ import scipy.spatial.distance as sdist
 import scipy.spatial.distance as sdist
 import math
 from sklearn import metrics
-df = pd.read_csv('CSVscale01newColumn.csv',sep=',',header=0, encoding='unicode_escape')
+from sklearn.decomposition import PCA
+import matplotlib.pyplot as plt
+df = pd.read_csv('CSVnewMain29-11.csv',sep=',',header=0, encoding='unicode_escape')
 
+#CSVnewMain29-11.csv
 #points = df.drop('id', axis=1)
  #or points = df[['Type1', 'Type2', 'Type3']]
-kmeans = cluster.KMeans(n_clusters=3, random_state=0).fit(df)
+df = df.dropna()
+kmeans = cluster.KMeans(n_clusters=20, random_state=0).fit(df)
 #df['cluster'] = kmeans.labels_ #รวมแล้วมิติไม่เท่ากัน
 
 centroids = kmeans.cluster_centers_
@@ -33,9 +37,9 @@ print("_________________________________________________________________________
 #print(centroids)
 #combine = combine.to_csv('TestLongKmean.csv', index=False)
 
-pdists = dists.to_csv('newMain_Distance3Cl.csv', index=False)
-#pdctr = pdctr.to_csv('nOri_Centroid10Cl.csv', index=False)
-pkmeanlbl = kmeanlbl.to_csv('newMain_Label3Cl.csv', index=False)
+#pdists = dists.to_csv('FinMain_Distance10Cl.csv', index=False)
+#pdctr = pdctr.to_csv('FinMain_Centroid10Cl.csv', index=False)
+#pkmeanlbl = kmeanlbl.to_csv('FinMain_Label10Cl.csv', index=False)
 
 #_______________________________________________
 print("----------------------------------Mean Square--------------------------------------------")
@@ -51,16 +55,33 @@ for i in range(n):
 ea = j
     
 eachalldis = pd.DataFrame((ea),columns=['Distance'])
+
 #-------------------------------------------------------
 n_data = len(set(df.index))
 #print(n_data)
 eachpow =  eachalldis**2
-eachnormal = []
-eachnormal = abs(eachalldis)
-print("Mean Squared Error",eachpow.sum()/n_data)
-print("Root Mean Squared Error",math.sqrt(eachpow.sum()/n_data))
-print("Silhouette Coefficient: %0.3f" % metrics.silhouette_score(df, kmeans.labels_))
+eachabs = []
+eachabs = abs(eachalldis)
+
+#print("Mean Squared Error:",eachpow.sum()/n_data)
+#print("Root Mean Squared Error:",math.sqrt(eachpow.sum()/n_data))
+#print("Mean Absolute Error: ",eachabs.sum()/n_data)
+
+#print("Silhouette Coefficient: %0.3f" % metrics.silhouette_score(df, kmeans.labels_))
+
+#---------------------------------Test Filter Row By Column Values
+#CombineDC = pd.concat([df,kmeanlbl,eachalldis], axis = 1)
+#printCDC = CombineDC.to_csv('TestCombineAll.csv', index=False)
+print(n_data)
+#-----------------------------PCA ------------------------------------------
+pca = PCA(n_components=2).fit(df)
+pca_2d = pca.transform(df)
+
+
+plt.scatter(pca_2d[:,0],pca_2d[:,1], c=kmeans.labels_, cmap='rainbow') 
+plt.show()
 
 print("-----------------------------Finished-------------------------------")
 #distandcentr = pd.concat([dists, pdctr], axis = 1)
 #distandcentr = distandcentr.to_csv('Kmean5Clustr.csv', index=False)
+

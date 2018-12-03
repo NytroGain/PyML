@@ -12,9 +12,9 @@ from sklearn import metrics
 from sklearn.metrics import mean_squared_error
 
 #-----------------------------Load File-------------------------------------
-df = pd.read_csv('CSVscale01newColumn.csv', sep=',', header=0)
+df = pd.read_csv('CSVnewMain29-11.csv',sep=',',header=0, encoding='unicode_escape')
 
-
+df = df.dropna()
 #-----------------------------PCA ------------------------------------------
 #pca = PCA(n_components=2).fit(df)
 #pca_2d = pca.transform(df)
@@ -24,7 +24,7 @@ df = pd.read_csv('CSVscale01newColumn.csv', sep=',', header=0)
 
 #-----------------------------DBSCAN-----------------------------------------
 
-db = DBSCAN(eps=1.4, min_samples=100,algorithm='kd_tree', n_jobs=-1).fit(df)   #ใช้ eps=1.5 ขึ้นไปแล้วเครื่องค้าง ตอนนี้ลองถึง 1.4
+db = DBSCAN(eps=0.08, min_samples=100,algorithm='kd_tree', n_jobs=-1).fit(df)   #ใช้ eps=1.5 ขึ้นไปแล้วเครื่องค้าง ตอนนี้ลองถึง 1.4
 
 #----------------------------Plot Graph--------------------------------------
 #plt.scatter(pca_2d[:,0],pca_2d[:,1], c=db.labels_, cmap='rainbow') 
@@ -34,7 +34,7 @@ db = DBSCAN(eps=1.4, min_samples=100,algorithm='kd_tree', n_jobs=-1).fit(df)   #
 print("Show The Label of Each Data")
 labelof = pd.DataFrame((db.labels_),columns=['labels'])
 #print(labelof)
-labelof = labelof.to_csv(('DBSNewMain14.csv'), index=False)
+plabelof = labelof.to_csv(('DBSNewMain008-100.csv'), index=False)
 
 n_clusters_ = len(set(db.labels_)) - (1 if -1 in db.labels_ else 0)
 print('Estimated number of clusters: %d' % n_clusters_)
@@ -91,3 +91,10 @@ print('----------------------------------------END DBSCAN-----------------------
 
 #plt.scatter(pca_2d[:,0],pca_2d[:,1], c=db.labels_, cmap='rainbow') 
 #plt.show()
+#------------------
+pca = PCA(n_components=2).fit(df)
+pca_2d = pca.transform(df)
+
+plt.scatter(pca_2d[:,0],pca_2d[:,1], c=db.labels_, cmap='rainbow') 
+plt.legend
+plt.show()
