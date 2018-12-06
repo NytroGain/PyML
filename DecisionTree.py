@@ -4,6 +4,10 @@ import pandas as pd
 import numpy as np
 from sklearn import metrics
 from sklearn.metrics import accuracy_score
+from sklearn.metrics import confusion_matrix
+from sklearn.metrics import precision_score
+from sklearn.metrics import recall_score
+from sklearn.metrics import f1_score
 from sklearn.externals.six import StringIO
 
 import matplotlib.pyplot as plt 
@@ -18,7 +22,7 @@ dataset = pd.read_csv('bill_authentication.csv',sep=',',header=0, encoding='TIS-
 
 X = dataset.drop('Class', axis=1)   #without target
 y = dataset['Class']                #target
-features_name = list(X)
+features_name = list(X)             #Get name of feature want to show in Tree graph
 #-----------------------------------------------------Train test split
 
 from sklearn.model_selection import train_test_split  
@@ -44,7 +48,16 @@ dot_data = tree.export_graphviz(dtree,
                                 rounded=True)
 graph = pydotplus.graph_from_dot_data(dot_data)
 
-graph.write_png('tree.png')
+graph.write_png('tree5.png')
 
 
-print("end")
+fi = dtree.feature_importances_
+print(features_name)
+print(fi)
+#-----------------------------------------------Evaluate
+print("Confusion Matrix = ",confusion_matrix(y_test, y_pred))
+print("Precision Score = ",precision_score(y_test, y_pred, average=None))
+print("Recall Score = ",recall_score(y_test,y_pred, average=None))
+print("Accuracy Score = ",accuracy_score(y_test, y_pred))
+print("F measure = ",f1_score(y_test, y_pred, average=None))
+print("---------------------------------------------End-------------------------------------------------")
