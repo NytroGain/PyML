@@ -1,14 +1,16 @@
-from sklearn import tree
+from sklearn.naive_bayes import GaussianNB
 from sklearn.model_selection import train_test_split
 import pandas as pd
 import numpy as np
 from sklearn import metrics
 from sklearn.metrics import accuracy_score , confusion_matrix , precision_score, recall_score, f1_score, classification_report
+
 from sklearn.externals.six import StringIO
 
 import matplotlib.pyplot as plt 
 from sklearn.tree import export_graphviz
 import pydotplus
+from sklearn.model_selection import train_test_split
 
 #-----------------------------------------------------Read CSV File
 dataset = pd.read_csv('Bill.csv',sep=',',header=0, encoding='TIS-620')
@@ -17,39 +19,13 @@ dataset = pd.read_csv('Bill.csv',sep=',',header=0, encoding='TIS-620')
 
 X = dataset.drop('Class', axis=1)   #without target
 y = dataset['Class']                #target
-features_name = list(X)             #Get name of feature want to show in Tree graph
-#-----------------------------------------------------Train test split
-
-from sklearn.model_selection import train_test_split  
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)  
+#----------------------------------------------------GNB
+gnb = GaussianNB()
+gnb.fit(X_train,y_train)
+y_pred = gnb.predict(X_test)
 
-#test_size 0.2 means ratio of test = 20% of 100%
-
-#-----------------------------------------------------
-from sklearn.tree import DecisionTreeClassifier  
-dtree = DecisionTreeClassifier()  
-dtree.fit(X_train, y_train) 
-
-y_pred = dtree.predict(X_test)  
-
-ans  = pd.DataFrame(y_test)
-
-pans = ans.to_csv('TestAns.csv',index=['index'])
-#-------------------------------------------------Plot
-dot_data = tree.export_graphviz(dtree,
-                                feature_names=features_name,
-                                out_file=None,
-                                filled=True,
-                                rounded=True)
-graph = pydotplus.graph_from_dot_data(dot_data)
-
-graph.write_png('tree6.png')
-
-
-fi = dtree.feature_importances_
-print(features_name)
-print(fi)
-#-----------------------------------------------Evaluate
+#---------------------------------------------------Evaluate
 print("Confusion Matrix = ",confusion_matrix(y_test, y_pred))
 print("Precision Score = ",precision_score(y_test, y_pred, average=None))
 print("Recall Score = ",recall_score(y_test,y_pred, average=None))
