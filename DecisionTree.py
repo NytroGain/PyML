@@ -45,16 +45,17 @@ y_pred = dtree.predict(X_test)
 ans  = pd.DataFrame(y_test)
 
 pans = ans.to_csv('TestAnsMD5.csv',index=['index'])
+cname = ['No','Yes']
 #-------------------------------------------------Plot
 dot_data = tree.export_graphviz(dtree,
                                 feature_names=features_name,
                                 out_file=None,
                                 filled=True,
                                 rounded=True,
-                                class_names=['No','Yes'])
+                                class_names=cname)
 graph = pydotplus.graph_from_dot_data(dot_data)
 
-graph.write_png('treeDACIMD5T.png')
+graph.write_png('R.png')
 
 
 fi = dtree.feature_importances_
