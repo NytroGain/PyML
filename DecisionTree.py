@@ -11,12 +11,23 @@ from sklearn.tree import export_graphviz
 import pydotplus
 
 #-----------------------------------------------------Read CSV File
-dataset = pd.read_csv('Bill.csv',sep=',',header=0, encoding='TIS-620')
+dataset = pd.read_csv('ForDecisionNC02.csv',sep=',',header=0, encoding='TIS-620')
+
+#-----------------------------------------------------Factorize Data to float
+dataset.SEX = pd.factorize(dataset.SEX)[0]
+dataset.STATUS = pd.factorize(dataset.STATUS)[0]
+dataset.AGE = pd.factorize(dataset.AGE)[0]
+dataset.BRA_BRAND = pd.factorize(dataset.BRA_BRAND)[0]
+dataset.TYPE_PRODUCT = pd.factorize(dataset.TYPE_PRODUCT)[0]
+dataset.NEW_USED_ = pd.factorize(dataset.NEW_USED_)[0]
+dataset.ACI = pd.factorize(dataset.ACI)[0]
+
+
 
 #-----------------------------------------------------Create Train and Test
 
-X = dataset.drop('Class', axis=1)   #without target
-y = dataset['Class']                #target
+X = dataset.drop('ACI', axis=1)   #without target
+y = dataset['ACI']                #target
 features_name = list(X)             #Get name of feature want to show in Tree graph
 #-----------------------------------------------------Train test split
 
@@ -43,7 +54,7 @@ dot_data = tree.export_graphviz(dtree,
                                 rounded=True)
 graph = pydotplus.graph_from_dot_data(dot_data)
 
-graph.write_png('tree6.png')
+graph.write_png('treeDACI.png')
 
 
 fi = dtree.feature_importances_
