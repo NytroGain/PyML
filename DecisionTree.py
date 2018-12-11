@@ -20,13 +20,12 @@ dataset.AGE = pd.factorize(dataset.AGE)[0]
 dataset.BRA_BRAND = pd.factorize(dataset.BRA_BRAND)[0]
 dataset.TYPE_PRODUCT = pd.factorize(dataset.TYPE_PRODUCT)[0]
 dataset.NEW_USED_ = pd.factorize(dataset.NEW_USED_)[0]
-dataset.ACI = pd.factorize(dataset.ACI)[0]
 
 
 
 #-----------------------------------------------------Create Train and Test
 
-X = dataset.drop('ACI', axis=1)   #without target
+X = dataset.drop(['ACI','OCCUP_SUB'], axis=1)   #without target
 y = dataset['ACI']                #target
 features_name = list(X)             #Get name of feature want to show in Tree graph
 #-----------------------------------------------------Train test split
@@ -38,23 +37,24 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
 
 #-----------------------------------------------------
 from sklearn.tree import DecisionTreeClassifier  
-dtree = DecisionTreeClassifier()  
+dtree = DecisionTreeClassifier(max_depth=5)  
 dtree.fit(X_train, y_train) 
 
 y_pred = dtree.predict(X_test)  
 
 ans  = pd.DataFrame(y_test)
 
-pans = ans.to_csv('TestAns.csv',index=['index'])
+pans = ans.to_csv('TestAnsMD5.csv',index=['index'])
 #-------------------------------------------------Plot
 dot_data = tree.export_graphviz(dtree,
                                 feature_names=features_name,
                                 out_file=None,
                                 filled=True,
-                                rounded=True)
+                                rounded=True,
+                                class_names=['No','Yes'])
 graph = pydotplus.graph_from_dot_data(dot_data)
 
-graph.write_png('treeDACI.png')
+graph.write_png('treeDACIMD5T.png')
 
 
 fi = dtree.feature_importances_
