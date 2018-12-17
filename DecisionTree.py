@@ -76,14 +76,19 @@ print("Accuracy Score = ",accuracy_score(y_test, y_pred))
 print("F measure = ",f1_score(y_test, y_pred, average=None))
 print("TEST CLASSIFICATION RECORD")
 print(classification_report(y_test, y_pred)) 
+count_row = y_test.shape[0]
+print("Total Example : ",count_row)
+count_correctclassified = (y_test == y_pred).sum()
+print('Correct classified samples: {}'.format(count_correctclassified))
 count_misclassified = (y_test != y_pred).sum()
 print('Misclassified samples: {}'.format(count_misclassified))
+
 #----------------------------------------------------Runtime
 
 print("---Runtime %s seconds ---" % (time.time() - start_time))
 
 #---------------------------------------------------SaveModel
 
-pickle.dump(dtree, open('dtree_model_pickle.p', 'wb'))
+#pickle.dump(dtree, open('dtree_model_pickle.p', 'wb'))
 
 print("---------------------------------------------End-------------------------------------------------")
