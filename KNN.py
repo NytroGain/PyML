@@ -70,15 +70,28 @@ print(proba)
 print(X_test)
 print(z_test)'''
 #print("--------------------------X_test")
-#pa = pd.DataFrame(X_test)
-#con = pd.concat([z,pa],axis=1)
-#print(con)
-#print("---------------------X_train")
-#pb = pd.DataFrame(X_train)
-#con = pd.concat([z,pb],axis=1)
+'''
+pa = pd.DataFrame(X_test)
+con = pd.concat([z,pa],axis=1)
+print(con)
+print("---------------------X_train")
+pb = pd.DataFrame(X_train)
+con = pd.concat([z,pb],axis=1)
+'''
+
+count_row = y_test.shape[0]
+print("Total Example : ",count_row)
+count_correctclassified = (y_test == y_pred).sum()
+print('Correct classified samples: {}'.format(count_correctclassified))
+count_misclassified = (y_test != y_pred).sum()
+print('Misclassified samples: {}'.format(count_misclassified))
 
 #----------------------------------------------------Runtime
 
 print("--- %s seconds ---" % (time.time() - start_time))
+
+'''#-----------------------------------------------------Mislabeled
+print("Number of mislabeled points out of a total %d points : %d"
+      % (dataset.shape[0],(dataset.ACI != y_pred).sum()))'''
 
 print("---------------------------------------------End-------------------------------------------------")
