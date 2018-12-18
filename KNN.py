@@ -17,6 +17,7 @@ start_time = time.time()
 dataset = pd.read_csv('afterFeatureSelectionCSV.csv',sep=',',header=0, encoding='TIS-620')
 
 #-----------------------------------------------------Factorize Data to float
+'''
 dataset.REGION = pd.factorize(dataset.REGION)[0]
 dataset.AGE = pd.factorize(dataset.AGE)[0]
 dataset.YEAR_OF_PRODUCT = pd.factorize(dataset.YEAR_OF_PRODUCT)[0]
@@ -29,11 +30,13 @@ dataset.CLAIM_CON = pd.factorize(dataset.CLAIM_CON)[0]
 dataset.INS_PAY_TYPE = pd.factorize(dataset.INS_PAY_TYPE)[0]
 dataset.INS_PAY_BY = pd.factorize(dataset.INS_PAY_BY)[0]
 dataset.COM_CONFIRM = pd.factorize(dataset.COM_CONFIRM)[0]
-
+'''
+onehot = dataset.drop(['ACI'], axis=1)
+onehot = pd.get_dummies(onehot)
 #-----------------------------------------------------Create Train and Test
 
-X = dataset.drop('ACI', axis=1)   #without target
-y = dataset['ACI']                #target 
+X = onehot   #without target
+y = dataset['ACI']                #target
 #-----------------------------------------------------Train And Test Split
 from sklearn.model_selection import train_test_split  
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.20)  
@@ -49,7 +52,7 @@ X_test = scaler.transform(X_test)  '''
 
 #----------------------------------------------------Training and Predictions
 from sklearn.neighbors import KNeighborsClassifier  
-classifier = KNeighborsClassifier(n_neighbors=5)  
+classifier = KNeighborsClassifier(n_neighbors=2)  
 classifier.fit(X_train, y_train)
 y_pred = classifier.predict(X_test)  
 
