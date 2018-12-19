@@ -21,12 +21,16 @@ from sklearn.preprocessing import OneHotEncoder
 dataset = pd.read_csv('afterFeatureSelectionCSV.csv',sep=',',header=0, encoding='TIS-620')
 
 dataset = dataset.drop(['ACI'], axis=1)
-
+'''
 nn = pd.get_dummies(dataset)
 nns = nn.to_csv('OtestUTF.csv', index=False, encoding='UTF-8')
 '''
-enc = OneHotEncoder(handle_unknown='ignore')
-print(enc.fit(dataset))
+enc = OneHotEncoder(sparse=False)
+nd = enc.fit_transform(dataset)
+print(nd)
+'''
+nd = pd.DataFrame(test)
+na = nd.to_csv('OnTest.csv', index=False)
 #nn = dataset.to_csv('OneHottest.csv', index=False)
 
 '''
