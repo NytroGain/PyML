@@ -42,7 +42,8 @@ for train_index, test_index in kf.split(X):
     score_array.append(accuracy_score(y_test, y_pred))
 
 avg_score = np.mean(score_array,axis=0)
-
+each_score = pd.DataFrame(score_array,columns=['Each Round'])
+each_score.index = each_score.index+1
 #---------------------------------------------------Multinomial
 '''
 from sklearn.naive_bayes import MultinomialNB
@@ -55,6 +56,8 @@ for train_index, test_index in kf.split(X):
     y_pred = clf.predict(X_test)
     score_array.append(accuracy_score(y_test, y_pred))
 avg_score = np.mean(score_array,axis=0)
+each_score = pd.DataFrame(score_array,columns=['Each Round'])
+each_score.index = each_score.index+1
 '''
 #---------------------------------------------------Bernoulli
 '''
@@ -68,6 +71,8 @@ for train_index, test_index in kf.split(X):
     y_pred = clf.predict(X_test)
     score_array.append(accuracy_score(y_test, y_pred))
 avg_score = np.mean(score_array,axis=0)
+each_score = pd.DataFrame(score_array,columns=['Each Round'])
+each_score.index = each_score.index+1
 '''
 #-----------------------------------------------Evaluate
 '''
@@ -86,7 +91,7 @@ count_misclassified = (y_test != y_pred).sum()
 print('Misclassified samples: {}'.format(count_misclassified))
 '''
 
-print("Accuracy Score For Each Round = ",score_array)
+print("Accuracy Score For Each Round = ",each_score)
 print("Accuracy Mean = ",avg_score)
 
 #----------------------------------------------------Runtime

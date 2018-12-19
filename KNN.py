@@ -38,6 +38,8 @@ for train_index, test_index in kf.split(X):
     y_pred = clf.predict(X_test)
     score_array.append(accuracy_score(y_test, y_pred))
 avg_score = np.mean(score_array,axis=0)
+each_score = pd.DataFrame(score_array,columns=['Each Round'])
+each_score.index = each_score.index+1
 '''predict = pd.DataFrame(classifier.predict(X),columns=['Predict'])
 proba = pd.DataFrame(classifier.predict_proba(X))'''
 
@@ -57,7 +59,7 @@ print('Correct classified samples: {}'.format(count_correctclassified))
 count_misclassified = (y_test != y_pred).sum()
 print('Misclassified samples: {}'.format(count_misclassified))
 '''
-print("Accuracy Score For Each Round = ",score_array)
+print("Accuracy Score For Each Round = ",each_score)
 print("Accuracy Mean = ",avg_score)
 
 #----------------------------------------------------Runtime

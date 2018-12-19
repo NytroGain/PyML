@@ -51,8 +51,9 @@ for train_index, test_index in kf.split(X):
     score_array.append(accuracy_score(y_test, y_pred))
 
 avg_score = np.mean(score_array,axis=0)
-
-print("Accuracy Score For Each Round = ",score_array)
+each_score = pd.DataFrame(score_array,columns=['Each Round'])
+each_score.index = each_score.index+1
+print("Accuracy Score For Each Round = ",each_score)
 print("Accuracy Mean = ",avg_score)
 #dtree.fit(X_train, y_train) 
 '''
