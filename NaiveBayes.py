@@ -10,6 +10,7 @@ from sklearn.externals.six import StringIO
 import matplotlib.pyplot as plt 
 from sklearn.tree import export_graphviz
 import pydotplus
+from sklearn.model_selection import KFold
 from sklearn.model_selection import train_test_split
 import time
 from sklearn.preprocessing import LabelEncoder , OneHotEncoder
@@ -18,48 +19,58 @@ start_time = time.time()
 dataset = pd.read_csv('afterFeatureSelectionCSV.csv',sep=',',header=0, encoding='TIS-620')
 #-----------------------------------------------------Factorize Data to float
 
-nn = dataset.drop(['ACI'], axis=1)
-#---------เตรียมข้อมูล-----------
-categorical_feature_mask = nn.dtypes==object
-categorical_cols = nn.columns[categorical_feature_mask].tolist()
-#---------LabelEncoder-----------
-le = LabelEncoder()
-nn[categorical_cols] = nn[categorical_cols].apply(lambda col: le.fit_transform(col))
-
-#----------OneHot---------
-ohe = OneHotEncoder(categorical_features = categorical_feature_mask, sparse=False )
-ReadyData = ohe.fit_transform(nn)
-'''
 onehot = dataset.drop(['ACI'], axis=1)
 onehot = pd.get_dummies(onehot)
-'''
+
 #-----------------------------------------------------Create Train and Test
 
-X = ReadyData   #without target
+X = onehot   #without target
 y = dataset['ACI']                #target
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)  
+
+kf = KFold(n_splits=10)
+KFold(n_splits=10, random_state=None, shuffle=False)
 
 #----------------------------------------------------GNB
-'''
+
 gnb = GaussianNB()
-gnb.fit(X_train,y_train)
-y_pred = gnb.predict(X_test)
-'''
+score_array =[]
+for train_index, test_index in kf.split(X):
+    X_train, X_test = X.iloc[train_index], X.iloc[test_index]
+    y_train, y_test = y.iloc[train_index], y.iloc[test_index]
+    clf=gnb.fit(X_train,y_train)
+    y_pred = clf.predict(X_test)
+    score_array.append(accuracy_score(y_test, y_pred))
+
+avg_score = np.mean(score_array,axis=0)
+
 #---------------------------------------------------Multinomial
 '''
 from sklearn.naive_bayes import MultinomialNB
 MNB = MultinomialNB()
-MNB.fit(X_train, y_train)
-y_pred = MNB.predict(X_test)
+score_array =[]
+for train_index, test_index in kf.split(X):
+    X_train, X_test = X.iloc[train_index], X.iloc[test_index]
+    y_train, y_test = y.iloc[train_index], y.iloc[test_index]
+    clf=MNB.fit(X_train,y_train)
+    y_pred = clf.predict(X_test)
+    score_array.append(accuracy_score(y_test, y_pred))
+avg_score = np.mean(score_array,axis=0)
 '''
 #---------------------------------------------------Bernoulli
-
+'''
 from sklearn.naive_bayes import BernoulliNB
 ber = BernoulliNB()
-ber.fit(X_train, y_train)
-y_pred = ber.predict(X_test)
-
+score_array =[]
+for train_index, test_index in kf.split(X):
+    X_train, X_test = X.iloc[train_index], X.iloc[test_index]
+    y_train, y_test = y.iloc[train_index], y.iloc[test_index]
+    clf=ber.fit(X_train,y_train)
+    y_pred = clf.predict(X_test)
+    score_array.append(accuracy_score(y_test, y_pred))
+avg_score = np.mean(score_array,axis=0)
+'''
 #-----------------------------------------------Evaluate
+'''
 print("Confusion Matrix = ",confusion_matrix(y_test, y_pred))
 print("Precision Score = ",precision_score(y_test, y_pred, average=None))
 print("Recall Score = ",recall_score(y_test,y_pred, average=None))
@@ -73,6 +84,10 @@ count_correctclassified = (y_test == y_pred).sum()
 print('Correct classified samples: {}'.format(count_correctclassified))
 count_misclassified = (y_test != y_pred).sum()
 print('Misclassified samples: {}'.format(count_misclassified))
+'''
+
+print("Accuracy Score For Each Round = ",score_array)
+print("Accuracy Mean = ",avg_score)
 
 #----------------------------------------------------Runtime
 
