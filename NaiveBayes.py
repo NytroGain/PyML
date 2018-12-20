@@ -31,7 +31,7 @@ kf = KFold(n_splits=10)
 KFold(n_splits=10, random_state=None, shuffle=False)
 
 #----------------------------------------------------GNB
-
+'''
 gnb = GaussianNB()
 score_array =[]
 for train_index, test_index in kf.split(X):
@@ -44,6 +44,7 @@ for train_index, test_index in kf.split(X):
 avg_score = np.mean(score_array,axis=0)
 each_score = pd.DataFrame(score_array,columns=['Each Round'])
 each_score.index = each_score.index+1
+'''
 #---------------------------------------------------Multinomial
 '''
 from sklearn.naive_bayes import MultinomialNB
@@ -60,7 +61,7 @@ each_score = pd.DataFrame(score_array,columns=['Each Round'])
 each_score.index = each_score.index+1
 '''
 #---------------------------------------------------Bernoulli
-'''
+
 from sklearn.naive_bayes import BernoulliNB
 ber = BernoulliNB()
 score_array =[]
@@ -73,7 +74,7 @@ for train_index, test_index in kf.split(X):
 avg_score = np.mean(score_array,axis=0)
 each_score = pd.DataFrame(score_array,columns=['Each Round'])
 each_score.index = each_score.index+1
-'''
+
 #-----------------------------------------------Evaluate
 '''
 print("Confusion Matrix = ",confusion_matrix(y_test, y_pred))

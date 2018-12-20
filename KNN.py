@@ -29,7 +29,7 @@ KFold(n_splits=10, random_state=None, shuffle=False)
 
 #----------------------------------------------------Training and Predictions
 from sklearn.neighbors import KNeighborsClassifier  
-KNN = KNeighborsClassifier(n_neighbors=2)  
+KNN = KNeighborsClassifier(n_neighbors=3)  
 score_array =[]
 for train_index, test_index in kf.split(X):
     X_train, X_test = X.iloc[train_index], X.iloc[test_index]
