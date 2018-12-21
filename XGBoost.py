@@ -7,8 +7,6 @@ from sklearn.model_selection import KFold
 from sklearn.model_selection import train_test_split  
 from sklearn.metrics import accuracy_score , confusion_matrix , precision_score, recall_score, f1_score, classification_report
 import pickle
-
-from keras.callbacks import History 
 from sklearn.model_selection import StratifiedKFold
 #----------------------------------------------------Read CSV File
 start_time = time.time()
@@ -52,3 +50,16 @@ count_correctclassified = (y_test == y_pred).sum()
 print('Correct classified samples: {}'.format(count_correctclassified))
 count_misclassified = (y_test != y_pred).sum()
 print('Misclassified samples: {}'.format(count_misclassified))
+
+#----------------------------------------------------Runtime
+
+print("---Runtime %s seconds ---" % (time.time() - start_time))
+
+
+#----------------------------- Save Model
+pickle.dump(model, open('XGBoost.p', 'wb'))
+
+
+
+#------------------------------
+print("-------------------------------------------------------End-------------------------------")
