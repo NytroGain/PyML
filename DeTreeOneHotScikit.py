@@ -41,7 +41,7 @@ KFold(n_splits=10, random_state=None, shuffle=False)
 
 #-----------------------------------------------------
 
-dtree = DecisionTreeClassifier(max_depth=10)  
+dtree = DecisionTreeClassifier(max_depth=100)  
 score_array =[]
 for train_index, test_index in kf.split(X):
     X_train, X_test = X.iloc[train_index], X.iloc[test_index]
@@ -82,7 +82,7 @@ print(features_name)
 print(fi)
 '''
 #-----------------------------------------------Evaluate
-'''
+
 print("Confusion Matrix = ",confusion_matrix(y_test, y_pred))
 print("Precision Score = ",precision_score(y_test, y_pred, average=None))
 print("Recall Score = ",recall_score(y_test,y_pred, average=None))
@@ -96,7 +96,7 @@ count_correctclassified = (y_test == y_pred).sum()
 print('Correct classified samples: {}'.format(count_correctclassified))
 count_misclassified = (y_test != y_pred).sum()
 print('Misclassified samples: {}'.format(count_misclassified))
-'''
+
 #----------------------------------------------------Runtime
 
 print("---Runtime %s seconds ---" % (time.time() - start_time))

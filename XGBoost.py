@@ -27,9 +27,9 @@ from xgboost import XGBClassifier
 from sklearn.metrics import mean_squared_error
 
 model = XGBClassifier()
-model=XGBClassifier(learning_rate=0.1,n_estimators=100)
+model=XGBClassifier(learning_rate=0.01,n_estimators=200)
 
-skf = StratifiedKFold(n_splits=2)
+skf = StratifiedKFold(n_splits=10)
 skf.get_n_splits(X, y)
 for train_index, test_index in skf.split(X, y):
     X_train, X_test = X.iloc[train_index], X.iloc[test_index]
@@ -57,7 +57,7 @@ print("---Runtime %s seconds ---" % (time.time() - start_time))
 
 
 #----------------------------- Save Model
-pickle.dump(model, open('XGBoost.p', 'wb'))
+pickle.dump(model, open('XGBoostK-10LR1.p', 'wb'))
 
 
 

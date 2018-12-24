@@ -14,7 +14,7 @@ import pickle
 
 #-----------------------------------------------------Read CSV File
 start_time = time.time()
-dataset = pd.read_csv('afterFeatureSelectionCSV.csv',sep=',',header=0, encoding='TIS-620')
+dataset = pd.read_csv('afterFeatureSelectionCSVbalance.csv',sep=',',header=0, encoding='TIS-620')
 
 #-----------------------------------------------------Factorize Data to float
 
@@ -29,7 +29,7 @@ features_name = list(X)             #Get name of feature want to show in Tree gr
 #-----------------------------------------------------Train test split
 
 from sklearn.model_selection import train_test_split  
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3)  
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)  
 
 #test_size 0.2 means ratio of test = 20% of 100%
 
@@ -57,11 +57,11 @@ graph = pydotplus.graph_from_dot_data(dot_data)
 graph.write_png('TesssN13.png')
 '''
 
-
+'''
 fi = dtree.feature_importances_
 print(features_name)
 print(fi)
-
+'''
 #-----------------------------------------------Evaluate
 print("Confusion Matrix = ",confusion_matrix(y_test, y_pred))
 print("Precision Score = ",precision_score(y_test, y_pred, average=None))
@@ -96,3 +96,6 @@ loaded_model = pickle.load(open('dtree_model_pickle.p', 'rb'))
 result = loaded_model.score(xxxxx)
 print(result)
 '''
+#---------------------------------------------------SaveModel
+
+pickle.dump(dtree, open('dtree_model_TestBalance.p', 'wb'))

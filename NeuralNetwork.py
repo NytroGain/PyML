@@ -35,12 +35,12 @@ model = Sequential()
 
 #------------------------------------Create First Hidden Layer
 
-model.add(Dense(32, input_dim=onehotCo,init='uniform',activation='relu'))
+model.add(Dense(512, input_dim=onehotCo,init='uniform',activation='relu'))
 model.add(Dropout(rate=0.1))       #Use Dropout to prevent Data overfitting
 
 #------------------------------------Create Second Hidden Layer
 
-model.add(Dense(32,init='uniform',activation='relu'))
+model.add(Dense(512,init='uniform',activation='relu'))
 model.add(Dropout(rate=0.1))       #Use Dropout to prevent Data overfitting
 
 #------------------------------------Output Layer
@@ -49,32 +49,11 @@ model.add(Dense(1,init='uniform',activation='sigmoid'))
 
 model.compile(optimizer='adam',loss="binary_crossentropy",metrics=['accuracy'])
 
-#-----------------------------------K-Fold Cross Validation
-'''
-kf = KFold(n_splits=5)
-KFold(n_splits=5, random_state=None, shuffle=False)
-
-score_array =[]
-for train_index, test_index in kf.split(X):
-    X_train, X_test = X.iloc[train_index], X.iloc[test_index]
-    y_train, y_test = y.iloc[train_index], y.iloc[test_index]
-   '''
-
 score_array =[]
 X_train, X_test, y_train, y_test = train_test_split(X,y,test_size=0.2,random_state=0)  
 
-from sklearn.preprocessing import StandardScaler
 
-# Define the scaler 
-scaler = StandardScaler().fit(X_train)
-
-# Scale the train set
-X_train = scaler.transform(X_train)
-
-# Scale the test set
-X_test = scaler.transform(X_test)
-
-model.fit(X_train,y_train,batch_size=64, nb_epoch=10)
+model.fit(X_train,y_train,batch_size=64, nb_epoch=100)
 y_pred = model.predict_classes(X_test)
 score_array.append(accuracy_score(y_test, y_pred))
 k = pd.DataFrame(X_train)
@@ -88,7 +67,7 @@ each_score = pd.DataFrame(score_array,columns=['Each Round'])
 each_score.index = each_score.index+1
 print("Accuracy Score For Each Round = ",each_score)
 print("Accuracy Mean = ",avg_score)
-
+print("Confusion Matrix = ",confusion_matrix(y_test, y_pred))
 print(classification_report(y_test, y_pred)) 
 
 #-----------------------------Test Count num
@@ -109,13 +88,9 @@ print('Misclassified samples: {}'.format(count_misclassified))
 print("---Runtime %s seconds ---" % (time.time() - start_time))
 
 
-#open('Neural_T20.h5', 'wb')
-
-
 # Save the model in h5 format 
-#model.save('TestModelT1000.h5')
-'''
-model.save_weights('Neural_T20.h5')
-'''
+model.save('TestModelT200o512Dense.h5')
+
+
 print("----------------------------------------------End------------------------------------------")
 #------------------------------------------------------
