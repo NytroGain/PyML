@@ -20,7 +20,7 @@ from sklearn.model_selection import GridSearchCV,cross_val_score
 from sklearn.model_selection import StratifiedKFold
 #-----------------------------------------------------Read CSV File
 start_time = time.time()
-dataset = pd.read_csv('afterFeatureSelectionCSVbalance.csv',sep=',',header=0, encoding='TIS-620')
+dataset = pd.read_csv('afterFeatureSelectionCSV.csv',sep=',',header=0, encoding='TIS-620')
 
 #--------------------------------------------------Preprocess OneHot
 onehot = dataset.drop(['ACI'], axis=1)
@@ -38,15 +38,15 @@ y = dataset['ACI']                #target
 #-----------------------------------------------------Random Forest
 from sklearn.ensemble import RandomForestClassifier
 
-rafo = RandomForestClassifier(n_estimators=100,class_weight='balanced')
-skf = StratifiedKFold(n_splits=5, shuffle=False)
+rafo = RandomForestClassifier(n_estimators=500,class_weight='balanced')
+skf = StratifiedKFold(n_splits=10, shuffle=False)
 for train_index, test_index in skf.split(X, y):
     X_train, X_test = X.iloc[train_index], X.iloc[test_index]
     y_train, y_test = y.iloc[train_index], y.iloc[test_index]
     rafo.fit(X_train,y_train)
     y_pred=rafo.predict(X_test)
+    print("Confusion Matrix = ",confusion_matrix(y_test, y_pred))
 
-print("Confusion Matrix = ",confusion_matrix(y_test, y_pred))
 print("Accuracy Score = ",accuracy_score(y_test, y_pred))
 print("TEST CLASSIFICATION RECORD")
 print(classification_report(y_test, y_pred)) 
@@ -60,3 +60,7 @@ print('Misclassified samples: {}'.format(count_misclassified))
 #----------------------------------------------------Runtime
 
 print("---Runtime %s seconds ---" % (time.time() - start_time))
+
+#---------------------------------------------------SaveModel
+
+pickle.dump(rafo, open('RandomForest500.p', 'wb'))

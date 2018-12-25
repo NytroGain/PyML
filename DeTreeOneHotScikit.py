@@ -19,10 +19,10 @@ from sklearn.metrics import precision_recall_fscore_support
 from sklearn.model_selection import GridSearchCV,cross_val_score
 #-----------------------------------------------------Read CSV File
 start_time = time.time()
-dataset = pd.read_csv('afterFeatureSelectionCSV.csv',sep=',',header=0, encoding='TIS-620')
+dataset = pd.read_csv('ACIdataAfterSelection.csv',sep=',',header=0, encoding='TIS-620')
 
 #--------------------------------------------------Preprocess OneHot
-onehot = dataset.drop(['ACI'], axis=1)
+onehot = dataset.drop(['Account','ACI'], axis=1)
 onehot = pd.get_dummies(onehot)
 #-----------------------------------------------------Create Train and Test
 
@@ -41,13 +41,14 @@ KFold(n_splits=10, random_state=None, shuffle=False)
 
 #-----------------------------------------------------
 
-dtree = DecisionTreeClassifier(max_depth=100)  
+dtree = DecisionTreeClassifier()  
 score_array =[]
 for train_index, test_index in kf.split(X):
     X_train, X_test = X.iloc[train_index], X.iloc[test_index]
     y_train, y_test = y.iloc[train_index], y.iloc[test_index]
     clf=dtree.fit(X_train,y_train)
     y_pred = clf.predict(X_test)
+    print("Confusion Matrix = ",confusion_matrix(y_test, y_pred))
     score_array.append(accuracy_score(y_test, y_pred))
 
 avg_score = np.mean(score_array,axis=0)
@@ -83,33 +84,32 @@ print(fi)
 '''
 #-----------------------------------------------Evaluate
 
-print("Confusion Matrix = ",confusion_matrix(y_test, y_pred))
-print("Precision Score = ",precision_score(y_test, y_pred, average=None))
-print("Recall Score = ",recall_score(y_test,y_pred, average=None))
-print("Accuracy Score = ",accuracy_score(y_test, y_pred))
-print("F measure = ",f1_score(y_test, y_pred, average=None))
+#print("Confusion Matrix = ",confusion_matrix(y_test, y_pred))
+#print("Accuracy Score = ",accuracy_score(y_test, y_pred))
 print("TEST CLASSIFICATION RECORD")
 print(classification_report(y_test, y_pred)) 
+'''
 count_row = y_test.shape[0]
 print("Total Example : ",count_row)
 count_correctclassified = (y_test == y_pred).sum()
 print('Correct classified samples: {}'.format(count_correctclassified))
 count_misclassified = (y_test != y_pred).sum()
 print('Misclassified samples: {}'.format(count_misclassified))
-
+'''
 #----------------------------------------------------Runtime
 
 print("---Runtime %s seconds ---" % (time.time() - start_time))
 
 #---------------------------------------------------SaveModel
 
-#pickle.dump(dtree, open('dtree_model_pickleMD10.p', 'wb'))
+pickle.dump(dtree, open('dtree_noMD.p', 'wb'))
 '''
 print(X_test.shape)
 Shapes = pd.DataFrame(X_test)
 psha = Shapes.to_csv('X_testColumn.csv',index=False, encoding='UTF-8')
 '''
 print("---------------------------------------------End-------------------------------------------------")
+
 
 '''
 loaded_model = pickle.load(open('dtree_model_pickle.p', 'rb'))

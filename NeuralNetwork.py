@@ -15,10 +15,10 @@ from keras.callbacks import History
 
 #----------------------------------------------------Read CSV File
 start_time = time.time()
-dataset = pd.read_csv('afterFeatureSelectionCSV.csv',sep=',',header=0, encoding='TIS-620')
+dataset = pd.read_csv('ACIdataAfterSelection.csv',sep=',',header=0, encoding='TIS-620')
 
 #----------------------------------------------Preprocessing
-onehot = dataset.drop(['ACI'], axis=1)
+onehot = dataset.drop(['Account','ACI'], axis=1)
 onehot = pd.get_dummies(onehot)
 #------------------------------------Convert Output to 0,1 in one column
 dataset.ACI = dataset.ACI.replace("NO",0)
@@ -43,6 +43,7 @@ model.add(Dropout(rate=0.1))       #Use Dropout to prevent Data overfitting
 model.add(Dense(512,init='uniform',activation='relu'))
 model.add(Dropout(rate=0.1))       #Use Dropout to prevent Data overfitting
 
+
 #------------------------------------Output Layer
 
 model.add(Dense(1,init='uniform',activation='sigmoid'))
@@ -53,9 +54,9 @@ score_array =[]
 X_train, X_test, y_train, y_test = train_test_split(X,y,test_size=0.2,random_state=0)  
 
 
-model.fit(X_train,y_train,batch_size=64, nb_epoch=100)
-y_pred = model.predict_classes(X_test)
-score_array.append(accuracy_score(y_test, y_pred))
+model.fit(X_train,y_train,batch_size=64, epochs=500)
+y_pred = model.predict(X_test)
+score_array.append(accuracy_score(y_test, y_pred.round()))
 k = pd.DataFrame(X_train)
 l = pd.DataFrame(y_pred)
 '''
@@ -67,8 +68,8 @@ each_score = pd.DataFrame(score_array,columns=['Each Round'])
 each_score.index = each_score.index+1
 print("Accuracy Score For Each Round = ",each_score)
 print("Accuracy Mean = ",avg_score)
-print("Confusion Matrix = ",confusion_matrix(y_test, y_pred))
-print(classification_report(y_test, y_pred)) 
+print("Confusion Matrix = ",confusion_matrix(y_test, y_pred.round()))
+print(classification_report(y_test, y_pred.round())) 
 
 #-----------------------------Test Count num
 '''
@@ -89,7 +90,7 @@ print("---Runtime %s seconds ---" % (time.time() - start_time))
 
 
 # Save the model in h5 format 
-model.save('TestModelT200o512Dense.h5')
+model.save('TestModelT500o512Dense.h5')
 
 
 print("----------------------------------------------End------------------------------------------")

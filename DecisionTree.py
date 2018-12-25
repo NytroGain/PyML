@@ -14,12 +14,12 @@ import pickle
 
 #-----------------------------------------------------Read CSV File
 start_time = time.time()
-dataset = pd.read_csv('afterFeatureSelectionCSVbalance.csv',sep=',',header=0, encoding='TIS-620')
+dataset = pd.read_csv('ACIdataAfterSelection.csv',sep=',',header=0, encoding='TIS-620')
 
 #-----------------------------------------------------Factorize Data to float
 
 
-onehot = dataset.drop(['ACI'], axis=1)
+onehot = dataset.drop(['Account','ACI'], axis=1)
 onehot = pd.get_dummies(onehot)
 #-----------------------------------------------------Create Train and Test
 
@@ -29,13 +29,13 @@ features_name = list(X)             #Get name of feature want to show in Tree gr
 #-----------------------------------------------------Train test split
 
 from sklearn.model_selection import train_test_split  
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)  
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3)  
 
 #test_size 0.2 means ratio of test = 20% of 100%
 
 #-----------------------------------------------------
 from sklearn.tree import DecisionTreeClassifier  
-dtree = DecisionTreeClassifier(max_depth=10)  
+dtree = DecisionTreeClassifier(max_depth=100)  
 dtree.fit(X_train, y_train) 
 
 y_pred = dtree.predict(X_test)  
@@ -64,10 +64,8 @@ print(fi)
 '''
 #-----------------------------------------------Evaluate
 print("Confusion Matrix = ",confusion_matrix(y_test, y_pred))
-print("Precision Score = ",precision_score(y_test, y_pred, average=None))
-print("Recall Score = ",recall_score(y_test,y_pred, average=None))
 print("Accuracy Score = ",accuracy_score(y_test, y_pred))
-print("F measure = ",f1_score(y_test, y_pred, average=None))
+
 print("TEST CLASSIFICATION RECORD")
 print(classification_report(y_test, y_pred)) 
 count_row = y_test.shape[0]
@@ -98,4 +96,4 @@ print(result)
 '''
 #---------------------------------------------------SaveModel
 
-pickle.dump(dtree, open('dtree_model_TestBalance.p', 'wb'))
+#pickle.dump(dtree, open('dtree_model_Test100.p', 'wb'))

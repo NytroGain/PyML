@@ -14,12 +14,13 @@ from sklearn.model_selection import KFold
 from sklearn.model_selection import train_test_split
 import time
 from sklearn.preprocessing import LabelEncoder , OneHotEncoder
+import pickle
 #-----------------------------------------------------Read CSV File
 start_time = time.time()
-dataset = pd.read_csv('afterFeatureSelectionCSV.csv',sep=',',header=0, encoding='TIS-620')
+dataset = pd.read_csv('ACIdataAfterSelection.csv',sep=',',header=0, encoding='TIS-620')
 #-----------------------------------------------------Factorize Data to float
 
-onehot = dataset.drop(['ACI'], axis=1)
+onehot = dataset.drop(['Account','ACI'], axis=1)
 onehot = pd.get_dummies(onehot)
 
 #-----------------------------------------------------Create Train and Test
@@ -39,6 +40,7 @@ for train_index, test_index in kf.split(X):
     y_train, y_test = y.iloc[train_index], y.iloc[test_index]
     clf=gnb.fit(X_train,y_train)
     y_pred = clf.predict(X_test)
+    print("Confusion Matrix = ",confusion_matrix(y_test, y_pred))
     score_array.append(accuracy_score(y_test, y_pred))
 
 avg_score = np.mean(score_array,axis=0)
@@ -55,12 +57,13 @@ for train_index, test_index in kf.split(X):
     y_train, y_test = y.iloc[train_index], y.iloc[test_index]
     clf=MNB.fit(X_train,y_train)
     y_pred = clf.predict(X_test)
+    print("Confusion Matrix = ",confusion_matrix(y_test, y_pred))
     score_array.append(accuracy_score(y_test, y_pred))
 avg_score = np.mean(score_array,axis=0)
 each_score = pd.DataFrame(score_array,columns=['Each Round'])
 each_score.index = each_score.index+1
 '''
-#---------------------------------------------------Bernoulli
+#--------------------------------------------------Bernoulli
 
 from sklearn.naive_bayes import BernoulliNB
 ber = BernoulliNB()
@@ -70,6 +73,7 @@ for train_index, test_index in kf.split(X):
     y_train, y_test = y.iloc[train_index], y.iloc[test_index]
     clf=ber.fit(X_train,y_train)
     y_pred = clf.predict(X_test)
+    print("Confusion Matrix = ",confusion_matrix(y_test, y_pred))
     score_array.append(accuracy_score(y_test, y_pred))
 avg_score = np.mean(score_array,axis=0)
 each_score = pd.DataFrame(score_array,columns=['Each Round'])
@@ -77,25 +81,28 @@ each_score.index = each_score.index+1
 
 #-----------------------------------------------Evaluate
 '''
-print("Confusion Matrix = ",confusion_matrix(y_test, y_pred))
-print("Precision Score = ",precision_score(y_test, y_pred, average=None))
-print("Recall Score = ",recall_score(y_test,y_pred, average=None))
-print("Accuracy Score = ",accuracy_score(y_test, y_pred))
-print("F measure = ",f1_score(y_test, y_pred, average=None))
+
+print("Accuracy Score For Each Round = ",each_score)
+print("Accuracy Mean = ",avg_score)
 print("TEST CLASSIFICATION RECORD")
 print(classification_report(y_test, y_pred)) 
+'''
 count_row = y_test.shape[0]
 print("Total Example : ",count_row)
 count_correctclassified = (y_test == y_pred).sum()
 print('Correct classified samples: {}'.format(count_correctclassified))
 count_misclassified = (y_test != y_pred).sum()
 print('Misclassified samples: {}'.format(count_misclassified))
-'''
+
 
 print("Accuracy Score For Each Round = ",each_score)
 print("Accuracy Mean = ",avg_score)
 
+
 #----------------------------------------------------Runtime
+#---------------------------------------------------SaveModel
+
+pickle.dump(ber, open('NaiveBayes_ber.p', 'wb'))
 
 print("---Runtime %s seconds ---" % (time.time() - start_time))
 print("---------------------------------------------End-------------------------------------------------")
