@@ -56,7 +56,7 @@ each_score = pd.DataFrame(score_array,columns=['Each Round'])
 each_score.index = each_score.index+1
 print("Accuracy Score For Each Round = ",each_score)
 print("Accuracy Mean = ",avg_score)
-#dtree.fit(X_train, y_train) 
+
 '''
 y_pred = dtree.predict(X_test)  
 

@@ -54,7 +54,7 @@ score_array =[]
 X_train, X_test, y_train, y_test = train_test_split(X,y,test_size=0.2,random_state=0)  
 
 
-model.fit(X_train,y_train,batch_size=64, epochs=500)
+model.fit(X_train,y_train,batch_size=64, epochs=1000)
 y_pred = model.predict(X_test)
 score_array.append(accuracy_score(y_test, y_pred.round()))
 k = pd.DataFrame(X_train)
@@ -90,7 +90,7 @@ print("---Runtime %s seconds ---" % (time.time() - start_time))
 
 
 # Save the model in h5 format 
-model.save('TestModelT500o512Dense.h5')
+model.save('TestModelT1000o512Dense.h5')
 
 
 print("----------------------------------------------End------------------------------------------")
